@@ -31,7 +31,8 @@ def get_html(url:str, max_attempt:int=3):
     }
 
     cookies = {
-      'REMEMBERME': os.environ.get("IGRAAL_COOKIE")
+      'REMEMBERME': os.environ.get("IGRAAL_COOKIE"),
+      'datadome': os.environ.get("IGRAAL_CAPTCHA")
     }
 
 
