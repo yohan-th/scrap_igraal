@@ -8,7 +8,8 @@ from tools import log, get_html_android
 ##
 
 def save_data(val, det, con):
-	with open(f'data/{slug}.csv', 'a+', newline='') as f:
+	if not os.path.exists('data_igraal'): os.mkdir('data_igraal')
+	with open(f'data_igraal/{slug}.csv', 'a+', newline='') as f:
 		f.write(f'[{time.strftime("%d/%m/%Y-%H:%M")}]{value}\n')
 		wr = csv.writer(f, quoting=csv.QUOTE_ALL)
 		wr.writerow(details)
@@ -23,8 +24,6 @@ if 'yohan' not in html:
 selection_du_jour = re.search(r'Classement des offres(.*?)data-ig-redir-position=10', html, re.MULTILINE | re.DOTALL).group(0)
 top_10_slug = re.findall(r'data-ig-redir-urlname=(.*?) ', selection_du_jour)
 
-print(len(top_10_slug))
-sys.exit()
 for slug in top_10_slug:
 	print(slug)
 	html = get_html_android(f'https://fr.igraal.com/codes-promo/{slug}')
@@ -37,5 +36,5 @@ for slug in top_10_slug:
 	conditions = re.findall(r'mr-xxs-2.*?<span>(.*?)</span>', main_cashback)
 	print(conditions)
 
-	#save_data(value, details, conditions)
+	save_data(value, details, conditions)
 

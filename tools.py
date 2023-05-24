@@ -1,9 +1,7 @@
 import time, re, sys, os
 import html as html_parser
 from ppadb.client import Client as AdbClient
-
-
-debug = False
+import subprocess
 
 
 def log(txt:str, verbose=False, end='\n', date=True):
@@ -16,8 +14,8 @@ def log(txt:str, verbose=False, end='\n', date=True):
         logfile.write('['+time.strftime("%d/%m/%Y-%H:%M")+']'+txt+end)
     logfile.close()
 
-def get_html_android(url, max_retry=3):
-    html_path, retry = './webdav/data/page.html', 0
+def get_html_android(url, max_retry=5):
+    html_path, retry = './webdav/page.html', 0
     if os.path.exists(html_path): os.remove(html_path)
     
     client = AdbClient(host='127.0.0.1', port=5037)
@@ -27,7 +25,8 @@ def get_html_android(url, max_retry=3):
     ts_loading = time.time()
     while not os.path.exists(html_path):
         time.sleep(1)
-        if time.time() - ts_loading > 21:
+        if time.time() - ts_loading > 60:
+            log(f'{retry}/{max_retry} Time out {url}', verbose=True)
             retry, ts_loading = retry + 1, time.time()
             device.shell('am force-stop org.mozilla.fenix && sleep 3')
             device.shell(f'am start -a android.intent.action.VIEW -d {url}')
