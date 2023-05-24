@@ -1,0 +1,14 @@
+version: '3'
+services:
+  webdav:
+    image: bytemark/webdav
+    restart: always
+    ports:
+      - "8081:80"
+    environment:
+      AUTH_TYPE: Basic
+      USERNAME: yohan
+      PASSWORD: yohan
+    volumes:
+      - ./webdav:/var/lib/dav
+
