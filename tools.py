@@ -1,12 +1,12 @@
 import time, re, sys, os
 import html as html_parser
 from ppadb.client import Client as AdbClient
-import subprocess
 
 
 def log(txt:str, verbose=False, end='\n', date=True):
     if verbose == True:
         print(txt)
+    if not os.path.exists('tmp'): os.mkdir('tmp')
     logfile = open('tmp/file.log', "a+")
     if date == False:
         logfile.write(txt+end)
@@ -19,7 +19,7 @@ def get_html_android(url, max_retry=5):
     if os.path.exists(html_path): os.remove(html_path)
     
     client = AdbClient(host='127.0.0.1', port=5037)
-    device = client.device('89BX07Q17')
+    device = client.device('89BX07Q17') #pixel3
     device.shell('am force-stop org.mozilla.fenix && sleep 3')
     device.shell(f'am start -a android.intent.action.VIEW -d {url}')
     ts_loading = time.time()

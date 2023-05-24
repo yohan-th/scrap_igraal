@@ -1,10 +1,11 @@
-import sys, re, csv, time
+import os, sys, re, csv, time
 
 from tools import log, get_html_android
 
 ##
 #TODO:
-#organiser les données pour être exploité par un plugin ? sqlite ?
+# - Warn by email or SMS on fail
+# - Save les data dans une DB au lieu des csv
 ##
 
 def save_data(val, det, con):
@@ -22,9 +23,9 @@ if 'yohan' not in html:
 	sys.exit()
 
 selection_du_jour = re.search(r'Classement des offres(.*?)data-ig-redir-position=10', html, re.MULTILINE | re.DOTALL).group(0)
-top_10_slug = re.findall(r'data-ig-redir-urlname=(.*?) ', selection_du_jour)
-
-for slug in top_10_slug:
+tops_slug = re.findall(r'data-ig-redir-urlname=(.*?) ', selection_du_jour)
+print(f'Scrap {len(tops_slug)} links')
+for slug in tops_slug:
 	print(slug)
 	html = get_html_android(f'https://fr.igraal.com/codes-promo/{slug}')
 	main_cashback = re.search(r'data-ig-cashback-block(.*?)see conditions', html, re.MULTILINE | re.DOTALL).group(0)
