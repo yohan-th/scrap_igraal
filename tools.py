@@ -14,6 +14,16 @@ def log(txt:str, verbose=False, end='\n', date=True):
         logfile.write('['+time.strftime("%d/%m/%Y-%H:%M")+']'+txt+end)
     logfile.close()
 
+def unlock_screen(lock=True):
+    client = AdbClient(host='127.0.0.1', port=5037)
+    device = client.device('89BX07Q17') #pixel3
+    device.shell('adb shell input keyevent 26') #lock button
+    if lock == True: return
+    device.shell('adb shell input keyevent 82') #swipe
+    device.shell('adb shell input text XXXX') #code
+    device.shell('adb shell input keyevent 66') #OK
+    time.sleep(2)
+
 def get_html_android(url, max_retry=5):
     html_path, retry = './webdav/page.html', 0
     if os.path.exists(html_path): os.remove(html_path)

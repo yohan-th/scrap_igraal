@@ -16,6 +16,7 @@ def save_data(val, det, con):
 		wr.writerow(details)
 		wr.writerow(conditions)
 
+unlock_screen()
 html = get_html_android('https://fr.igraal.com/selection/?s=publishDate')
 
 if 'yohan' not in html:
@@ -39,3 +40,4 @@ for slug in tops_slug:
 
 	save_data(value, details, conditions)
 
+unlock_screen(lock=True)
